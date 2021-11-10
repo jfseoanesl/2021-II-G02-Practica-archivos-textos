@@ -10,8 +10,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -109,6 +108,72 @@ public class ArchivoGoleadores {
         
         
     }
+    
+    public Futbolista buscar(String cc){
+        Futbolista buscado = null;
+        
+        try{
+            this.aLectura = new Scanner(this.archivo);
+            while(this.aLectura.hasNext()){
+                Futbolista f = this.leerFutbolista(this.aLectura.nextLine().split(";"));
+                if(f.getCc().equals(cc)){
+                    buscado = f;
+                    break;
+                }
+            }
+            return buscado;
+        }catch(IOException ioe){
+            System.out.println(ioe);
+            return null;
+        }
+        finally{
+            if(this.aLectura!=null)
+                this.aLectura.close();
+        }
+    }
+    
+    
+    
+    public Futbolista eliminar(String cc){ // 123
+        
+        Futbolista eliminado = null;
+        List<Futbolista> listadoGoleadores = this.leer();
+        ArchivoGoleadores archivoTmp = new ArchivoGoleadores("ListadoGoleadoresTmp.dat");
+        for(Futbolista f: listadoGoleadores){
+            if(f.getCc().equals(cc)){
+                eliminado = f;
+            }
+            else{
+               archivoTmp.escribir(f);
+            }
+        }
+        
+        try {       
+            if(!archivoTmp.archivo.exists()){
+                archivoTmp.archivo.createNewFile();
+            }
+            
+            if(this.archivo.delete()){
+                if(archivoTmp.archivo.renameTo(this.archivo)){
+                    return eliminado;
+                }
+                else{
+                    throw new IOException("El archivo temporal no fue renombrado");
+                }
+                
+            }
+            else{
+                throw new IOException("El archivo original no fue eliminado");
+            }
+                        
+        }catch(IOException io){
+            System.out.println(io);
+            return null;
+        }    
+        
+    }
+    
+    
     
     public boolean escribir (Futbolista f){
         

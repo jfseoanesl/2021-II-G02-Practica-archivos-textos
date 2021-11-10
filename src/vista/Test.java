@@ -8,6 +8,7 @@ package vista;
 import datos.ArchivoGoleadores;
 import entidades.Futbolista;
 import java.util.List;
+import modelo.RegistroGoleadores;
 
 /**
  *
@@ -17,12 +18,30 @@ public class Test {
     
     public static void main(String[] args) {
         
-        ArchivoGoleadores archivo = new ArchivoGoleadores();
+        RegistroGoleadores modelo = new RegistroGoleadores();
         Futbolista f1 = new Futbolista("123", "Valenciano", "Junior", 100, 70);
+        Futbolista f2 = new Futbolista("456", "Ronaldo", "Madrid", 100, 70);
+        Futbolista f3 = new Futbolista("789", "Falcao", "Rayo", 100, 70);
+        Futbolista f4 = new Futbolista("543", "Seoanes", "Liverpool", 100, 70);
         
-        archivo.escribir(f1);
-        
-        List<Futbolista> goleadores = archivo.leer();
+        modelo.registrar(f1);
+        modelo.registrar(f2);
+        modelo.registrar(f3);
+        modelo.registrar(f4);
+        System.out.println("---------------------");
+        Futbolista eliminado = modelo.eliminar("123");
+        System.out.println("Futbolista eliminado: ");
+        imprimirFutbolista(eliminado);
+        System.out.println("---------------------");
+        System.out.println("Futbolista buscado: ");
+        Futbolista buscado = modelo.buscar("789");
+        if(buscado!=null)
+            imprimirFutbolista(buscado);
+        else
+            System.out.println("El futbolista de cedula 555 no se encuentra en el archivo");
+        System.out.println("---------------------");
+        System.out.println("Futbolista en el archivo: ");
+        List<Futbolista> goleadores = modelo.leer();
         imprimirLista(goleadores);
         
     }

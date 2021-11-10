@@ -5,8 +5,9 @@
  */
 package modelo;
 
-import datos.ArchivoGoleadores;
+import datos.ArchivoGoleadoresTexto;
 import entidades.Futbolista;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -14,43 +15,44 @@ import java.util.List;
  * @author jairo
  */
 public class RegistroGoleadores {
-    private ArchivoGoleadores datos;
+    private ArchivoGoleadoresTexto datos; //
 
     public RegistroGoleadores() {
-        this.datos = new ArchivoGoleadores();
+        this.datos = new ArchivoGoleadoresTexto();
     }
 
     /**
      * @return the datos
      */
-    public ArchivoGoleadores getDatos() {
+    public ArchivoGoleadoresTexto getDatos() {
         return datos;
     }
 
     /**
      * @param datos the datos to set
      */
-    public void setDatos(ArchivoGoleadores datos) {
+    public void setDatos(ArchivoGoleadoresTexto datos) {
         this.datos = datos;
     }
     
     
-    public boolean registrar(Futbolista f){
+    public boolean registrar(Futbolista f) throws IOException{
         return this.datos.escribir(f);
     }
     
-    public List<Futbolista> leer(){
+    public List<Futbolista> leer() throws IOException{
         return this.datos.leer();
     }
     
-    public Futbolista eliminar(String cc){
+    public Futbolista eliminar(String cc) throws IOException{
         return this.datos.eliminar(cc);
     }
     
-    public Futbolista buscar(String cc){
+    public Futbolista buscar(String cc) throws IOException{
         return this.datos.buscar(cc);
     }
-    
+   
+    /* Para implementar
     public boolean mofdificar(Futbolista f){
         return true;
     }
@@ -58,4 +60,5 @@ public class RegistroGoleadores {
     public List<Futbolista> leer(double prome){
       return null;
     }
+    */
 }

@@ -16,16 +16,16 @@ import java.util.Scanner;
  *
  * @author jairo
  */
-public class ArchivoGoleadores {
+public class ArchivoGoleadoresTexto implements IArchivo {
     private File archivo;
     private FileWriter aEscritura;
     private Scanner aLectura;
 
-    public ArchivoGoleadores() {
+    public ArchivoGoleadoresTexto() {
         this.archivo = new File("GoleadoresLiga1.dat");
     }
     
-    public ArchivoGoleadores(String name){
+    public ArchivoGoleadoresTexto(String name){
         this.archivo = new File(name);
     }
 
@@ -82,9 +82,10 @@ public class ArchivoGoleadores {
         return f;
     }
     
-    public List<Futbolista> leer(){
+    @Override
+    public List<Futbolista> leer() throws IOException{
+        
         List<Futbolista> lista = null;
-       
         
         try {
             this.aLectura = new Scanner(this.archivo);
@@ -98,8 +99,7 @@ public class ArchivoGoleadores {
             
        
         } catch (FileNotFoundException ex) {
-            System.out.println("Error al leer el archivo");
-            return null;
+            throw new IOException("Error al leer el archivo");
         }
         finally{
             if(this.aLectura!=null)
@@ -109,7 +109,8 @@ public class ArchivoGoleadores {
         
     }
     
-    public Futbolista buscar(String cc){
+    @Override
+    public Futbolista buscar(String cc) throws IOException{
         Futbolista buscado = null;
         
         try{
@@ -122,9 +123,8 @@ public class ArchivoGoleadores {
                 }
             }
             return buscado;
-        }catch(IOException ioe){
-            System.out.println(ioe);
-            return null;
+        }catch(FileNotFoundException ex){
+            throw new IOException("No fue posible abrir el archivo para leer");
         }
         finally{
             if(this.aLectura!=null)
@@ -134,11 +134,12 @@ public class ArchivoGoleadores {
     
     
     
-    public Futbolista eliminar(String cc){ // 123
+    @Override
+    public Futbolista eliminar(String cc) throws IOException{ // 123
         
         Futbolista eliminado = null;
         List<Futbolista> listadoGoleadores = this.leer();
-        ArchivoGoleadores archivoTmp = new ArchivoGoleadores("ListadoGoleadoresTmp.dat");
+        ArchivoGoleadoresTexto archivoTmp = new ArchivoGoleadoresTexto("ListadoGoleadoresTmp.dat");
         for(Futbolista f: listadoGoleadores){
             if(f.getCc().equals(cc)){
                 eliminado = f;
@@ -148,34 +149,32 @@ public class ArchivoGoleadores {
             }
         }
         
-        try {       
-            if(!archivoTmp.archivo.exists()){
-                archivoTmp.archivo.createNewFile();
-            }
-            
-            if(this.archivo.delete()){
-                if(archivoTmp.archivo.renameTo(this.archivo)){
-                    return eliminado;
-                }
-                else{
-                    throw new IOException("El archivo temporal no fue renombrado");
-                }
-                
+               
+        if(!archivoTmp.archivo.exists()){
+            archivoTmp.archivo.createNewFile();
+        }
+
+        if(this.archivo.delete()){
+            if(archivoTmp.archivo.renameTo(this.archivo)){
+                return eliminado;
             }
             else{
-                throw new IOException("El archivo original no fue eliminado");
+                throw new IOException("El archivo temporal no fue renombrado");
             }
+
+        }
+        else{
+            throw new IOException("El archivo original no fue eliminado");
+        }
                         
-        }catch(IOException io){
-            System.out.println(io);
-            return null;
-        }    
+            
         
     }
     
     
     
-    public boolean escribir (Futbolista f){
+    @Override
+    public boolean escribir (Futbolista f) throws IOException{
         
         PrintWriter escritor=null;
         boolean exito = false;
@@ -184,26 +183,19 @@ public class ArchivoGoleadores {
             escritor = new PrintWriter(this.aEscritura);
             escritor.println(f.getDatosArchivoTexto());
             exito = true;
+            return exito;
             
         }catch(IOException ioe){
-            System.out.println("Error al abrir el archvio en modo escritura");
-            exito=false;
+            throw new IOException("Error al abrir el archvio en modo escritura");
         }
         finally{
             if(escritor!=null)
                 escritor.close();
             
             if(this.aEscritura!=null){
-                try{
-                    this.aEscritura.close();
-                }catch(IOException io){
-                    System.out.println(io);
-                }    
+                this.aEscritura.close();
             }    
-            
-            return exito;
         }
-        
     }
     
     

@@ -7,8 +7,11 @@ package vista;
 
 import datos.ArchivoGoleadoresTexto;
 import entidades.Futbolista;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.RegistroGoleadores;
 
 /**
@@ -54,6 +57,8 @@ public class Test {
        }catch(IOException ioe){
            System.out.println(ioe);
        } 
+        
+        
     }
     
     public static void imprimirFutbolista(Futbolista f){
@@ -62,9 +67,15 @@ public class Test {
     }
     
     public static void imprimirLista(List<Futbolista> lista){
+        System.out.printf("%10s %20s %10s %10s %10s %10s%n", "Cedula", "Nombre", "Equipo",
+                "No Goles", "No Partidos", "Promedio");
+        System.out.println("----------------------------------------------------------------------------------------------------");
         for(Futbolista f: lista ){
             imprimirFutbolista(f);
         }
     }
+   
+    
+    
     
 }

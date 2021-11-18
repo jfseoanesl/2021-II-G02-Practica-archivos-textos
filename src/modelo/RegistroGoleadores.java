@@ -5,7 +5,7 @@
  */
 package modelo;
 
-import datos.ArchivoGoleadoresTexto;
+import datos.*;
 import entidades.Futbolista;
 import java.io.IOException;
 import java.util.List;
@@ -15,16 +15,18 @@ import java.util.List;
  * @author jairo
  */
 public class RegistroGoleadores {
-    private ArchivoGoleadoresTexto datos; //
+    private IArchivo datos; //
 
     public RegistroGoleadores() {
-        this.datos = new ArchivoGoleadoresTexto();
+        //this.datos = new ArchivoGoleadoresTexto();
+        //this.datos = new ListaArrayList();
+        this.datos = new ArchivoGoleadoresBin();
     }
 
     /**
      * @return the datos
      */
-    public ArchivoGoleadoresTexto getDatos() {
+    public IArchivo getDatos() {
         return datos;
     }
 

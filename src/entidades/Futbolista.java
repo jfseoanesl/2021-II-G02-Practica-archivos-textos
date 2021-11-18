@@ -5,11 +5,14 @@
  */
 package entidades;
 
+import java.io.Serializable;
+
+
 /**
  *
  * @author jairo
  */
-public class Futbolista {
+public class Futbolista implements Serializable {
     
     private String cc;
     private String nombre;
